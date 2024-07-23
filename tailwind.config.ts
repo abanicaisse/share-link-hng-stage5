@@ -49,7 +49,7 @@ const config = {
         gray: "#737373",
         "dark-gray": "#333",
         "gray-light": "D9D9D9",
-        "gray-lightest": "FAFAFA",
+        "gray-lightest": "#FAFAFA",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

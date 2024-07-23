@@ -62,7 +62,7 @@ const AuthForm = ({
                   />
                 </div>
               ))}
-              <Button className="bg-purple text-white pointer-events-auto cursor-pointert px-[0.69rem] py-[1.69rem] hover:bg-purple-light hover:font-bold disabled:bg-purple-lightest disabled:font-bold focus:bg-purple-light focus:font-bold">
+              <Button className="bg-purple text-white pointer-events-auto cursor-pointert px-[0.69rem] py-[1.69rem] hover:bg-purple-light hover:font-bold disabled:bg-purple opacity-25 disabled:font-bold focus:bg-purple-light focus:font-bold">
                 {buttonLabel}
               </Button>
             </form>

@@ -7,7 +7,7 @@ import Image from "next/image";
 const Navbar = () => {
   const currentPath = usePathname();
   return (
-    <div className="flex items-center justify-between py-4 pl-6 pr-4">
+    <nav className="w-full max-w-[90rem] m-auto flex items-center justify-between py-4 pl-6 pr-4">
       <Link href="/" className="flex items-center gap-[0.38rem] cursor-pointer">
         <Image src="../logo-icon.svg" alt="Logo" width={32} height={32} />
         <span className="hidden md:inline text-dark-gray text-h-md font-bold">
@@ -85,7 +85,7 @@ const Navbar = () => {
           Preview
         </span>
       </Link>
-    </div>
+    </nav>
   );
 };
 
