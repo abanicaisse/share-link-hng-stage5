@@ -1,11 +1,8 @@
-"use client";
 import { Button } from "@components/ui/button";
 import UserLink from "@components/UserLink";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 
 export default function Home() {
-  const currentPath = usePathname();
   const userLinks: string[] = ["1"];
   return (
     <section className="w-full max-w-[90rem] m-auto flex lg:flex-row p-4 gap-6 bg-gray-lightest md:justify-center">

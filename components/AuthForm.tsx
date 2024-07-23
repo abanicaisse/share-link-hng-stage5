@@ -46,14 +46,14 @@ const AuthForm = ({
               {inputFields.map((inputField) => (
                 <div key={inputField.inputId}>
                   <label
-                    htmlFor={inputField.inputType}
+                    htmlFor={inputField.inputId}
                     className="text-b-s text-dark-gray mb-1"
                   >
                     {inputField.inputLabel}
                   </label>{" "}
                   <br />
                   <input
-                    type="text"
+                    type={inputField.inputType}
                     name={inputField.inputId}
                     id={inputField.inputId}
                     placeholder={inputField.inputPlaceholder}
