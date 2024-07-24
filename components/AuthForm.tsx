@@ -80,7 +80,7 @@ const AuthForm = ({
       registerUser(data.email, data.password);
 
       if (!user) return;
-      router.push("/");
+      router.push("/home");
 
       throw new Error();
     } catch (error) {
@@ -95,7 +95,7 @@ const AuthForm = ({
       loginUser(data.email, data.password);
 
       if (!user) return;
-      router.push("/");
+      router.push("/home");
 
       console.log(user);
       throw new Error();

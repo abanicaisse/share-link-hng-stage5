@@ -8,7 +8,10 @@ const Navbar = () => {
   const currentPath = usePathname();
   return (
     <nav className="w-full max-w-[90rem] m-auto flex items-center justify-between py-4 pl-6 pr-4">
-      <Link href="/" className="flex items-center gap-[0.38rem] cursor-pointer">
+      <Link
+        href="/home"
+        className="flex items-center gap-[0.38rem] cursor-pointer"
+      >
         <Image src="../logo-icon.svg" alt="Logo" width={32} height={32} />
         <span className="hidden md:inline text-dark-gray text-h-md font-bold">
           devlinks
@@ -16,23 +19,23 @@ const Navbar = () => {
       </Link>
       <div className="flex items-center justify-center">
         <Link
-          href="/"
+          href="/home"
           className={
-            currentPath === "/"
+            currentPath === "/home"
               ? "bg-purple-lightest group flex gap-2 items-center justify-center py-[0.69rem] px-[1.69rem] cursor-pointer border-purple-light rounded-lg"
               : "group flex gap-2 items-center justify-center py-[0.69rem] px-[1.69rem] cursor-pointer hover:bg-purple-lightest focus:bg-purple-lightest focus:border-purple-light rounded-lg"
           }
         >
           <LinkIcon
             className={
-              currentPath === "/"
+              currentPath === "/home"
                 ? "text-purple"
                 : "text-gray group-hover:text-purple"
             }
           />
           <span
             className={
-              currentPath === "/"
+              currentPath === "/home"
                 ? "hidden md:inline text-purple text-h-normal font-bold"
                 : "hidden md:inline text-gray group-hover:text-purple group-focus:text-purple text-h-normal font-bold"
             }
