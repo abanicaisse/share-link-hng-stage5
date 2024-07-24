@@ -19,10 +19,10 @@ const Signup = () => {
           inputPlaceholder: "At least 8 characters",
         },
         {
-          inputId: "confirm-password",
+          inputId: "confirmPassword",
           inputType: "password",
           inputLabel: "Confirm password",
-          inputPlaceholder: "At least 8 characters",
+          inputPlaceholder: "Re-enter your password",
         },
       ]}
       buttonLabel="Create new account"

@@ -3,7 +3,7 @@ import UserLink from "@components/UserLink";
 import Image from "next/image";
 
 export default function Home() {
-  const userLinks: string[] = ["1"];
+  const userLinks: string[] = [];
   return (
     <section className="w-full max-w-[90rem] m-auto flex lg:flex-row p-4 gap-6 bg-gray-lightest md:justify-center">
       <div className="desktop-preview bg-white hidden lg:flex justify-center align-center flex-[0.4] rounded-[.75rem]">

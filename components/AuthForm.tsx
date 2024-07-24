@@ -1,5 +1,11 @@
+"use client";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginUser, registerUser } from "@lib/firebase/auth";
 
 type AuthProps = {
   authType: string;
@@ -25,6 +31,80 @@ const AuthForm = ({
   authModeText,
   authModeLink,
 }: AuthProps) => {
+  const signupSchema = z
+    .object({
+      email: z.string().email(),
+      password: z.string().min(8),
+      confirmPassword: z.string().min(8),
+    })
+    .superRefine(({ confirmPassword, password }, ctx) => {
+      if (confirmPassword !== password) {
+        ctx.addIssue({
+          code: "custom",
+          message: "The passwords did not match",
+          path: ["confirmPassword"],
+        });
+      }
+    });
+
+  const loginSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+  });
+
+  type signupInputFields = z.infer<typeof signupSchema>;
+  type loginInputFields = z.infer<typeof signupSchema>;
+
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = (
+    authType === "Create account"
+      ? useForm<signupInputFields>
+      : useForm<loginInputFields>
+  )({
+    resolver:
+      authType === "Create account"
+        ? zodResolver(signupSchema)
+        : zodResolver(loginSchema),
+  });
+
+  const onRegistrationSubmit: SubmitHandler<signupInputFields> = async (
+    data
+  ) => {
+    try {
+      const user = await registerUser(data.email, data.password);
+      registerUser(data.email, data.password);
+
+      if (!user) return;
+      router.push("/");
+
+      throw new Error();
+    } catch (error) {
+      console.log(error);
+      setError("root", { message: "This email is already taken" });
+    }
+  };
+
+  const onLoginSubmit: SubmitHandler<signupInputFields> = async (data) => {
+    try {
+      const user = await loginUser(data.email, data.password);
+      loginUser(data.email, data.password);
+
+      if (!user) return;
+      router.push("/");
+
+      console.log(user);
+      throw new Error();
+    } catch (error) {
+      console.log(error);
+      setError("root", { message: "This email is already taken" });
+    }
+  };
+
   return (
     <div className="w-full h-full p-8 grid flex-1 flex-col items-start self-stretch sm:bg-gray-lightest">
       <div className="w-full sm:max-w-[30rem] flex flex-col flex-1 gap-16 items-start sm:items-center sm:justify-center sm:m-auto">
@@ -42,7 +122,15 @@ const AuthForm = ({
             <p className="text-gray text-h-normal font-not-bold">{authDesc}</p>
           </div>
           <div className="w-full flex flex-col gap-6 flex-start">
-            <form action="#" className="flex flex-col flex-1 gap-6">
+            <form
+              action="#"
+              className="flex flex-col flex-1 gap-6"
+              onSubmit={
+                authType === "Create account"
+                  ? handleSubmit(onRegistrationSubmit)
+                  : handleSubmit(onLoginSubmit)
+              }
+            >
               {inputFields.map((inputField) => (
                 <div key={inputField.inputId}>
                   <label
@@ -54,16 +142,41 @@ const AuthForm = ({
                   <br />
                   <input
                     type={inputField.inputType}
-                    name={inputField.inputId}
+                    // name={inputField.inputId}
                     id={inputField.inputId}
                     placeholder={inputField.inputPlaceholder}
-                    required
+                    {...register(
+                      inputField.inputId === "email"
+                        ? "email"
+                        : inputField.inputId === "password"
+                        ? "password"
+                        : "confirmPassword"
+                    )}
                     className="w-full rounded-lg py-3 px-4 border-solid border-[1px] border-gray-light"
                   />
+                  {inputField.inputId === "email" && errors.email && (
+                    <p className="text-red">{errors.email?.message}</p>
+                  )}
+                  {inputField.inputId === "password" && errors.password && (
+                    <p className="text-red">{errors.password?.message}</p>
+                  )}
+                  {inputField.inputId === "confirmPassword" &&
+                    errors?.confirmPassword && (
+                      <p className="text-red">
+                        {errors.confirmPassword?.message}
+                      </p>
+                    )}
                 </div>
               ))}
-              <Button className="bg-purple text-white pointer-events-auto cursor-pointert px-[0.69rem] py-[1.69rem] hover:bg-purple-light hover:font-bold disabled:bg-purple opacity-25 disabled:font-bold focus:bg-purple-light focus:font-bold">
-                {buttonLabel}
+              {errors.root && (
+                <p className="text-red">{errors.root?.message}</p>
+              )}
+              <Button
+                className="bg-purple text-white pointer-events-auto cursor-pointert px-[0.69rem] py-[1.69rem] hover:bg-purple-light hover:font-bold disabled:bg-purple disabled:opacity-25 disabled:font-bold focus:bg-purple-light focus:font-bold"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Loading..." : buttonLabel}
               </Button>
             </form>
             <div className="w-full text-center">

@@ -7,7 +7,7 @@ const Login = () => {
       authDesc="Add your details below to get back into the app"
       inputFields={[
         {
-          inputId: "password",
+          inputId: "email",
           inputType: "email",
           inputLabel: "Email address",
           inputPlaceholder: "e.g. alex@email.com",
