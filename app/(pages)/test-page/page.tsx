@@ -1,11 +1,7 @@
-// "use client";
-// import React from "react";
-// import { useState, useEffect } from "react";
-// import { db } from "@lib/firebase/firebase";
+"use client";
 
-// const page = () => {
-//   const [title, setTitle]
-//   return <div>page</div>;
-// };
+const page = () => {
+  return <div>page</div>;
+};
 
-// export default page;
+export default page;
