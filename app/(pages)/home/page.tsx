@@ -6,7 +6,11 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const [addedLinksTracker, setAddedLinksTracker] = useState<number[]>([]);
-  const AddedLinks: number[] = JSON.parse(localStorage.getItem("addedLinks"));
+
+  const addedLinksJSON = localStorage.getItem("addedLinks");
+
+  const addedLinks: number[] =
+    addedLinksJSON !== null ? JSON.parse(addedLinksJSON) : [];
 
   const addLinkToUi = () => {
     setAddedLinksTracker((prev) => [...prev, 1]);
@@ -43,7 +47,7 @@ export default function Home() {
             </Button>
           </div>
           <div className="rounded-[.75rem]">
-            {!AddedLinks || AddedLinks?.length === 0 ? (
+            {!addedLinks || addedLinks?.length === 0 ? (
               <>
                 <div className="w-full bg-gray-lightest rounded-[.75rem] text-center py-[2.91rem] md:py-[5.16rem] px-[1.25rem] flex flex-col gap-6 justify-center align-center">
                   <Image
@@ -66,7 +70,7 @@ export default function Home() {
               </>
             ) : (
               <>
-                {AddedLinks?.map((tracker, i) => (
+                {addedLinks?.map((tracker, i) => (
                   <UserLink key={i} />
                 ))}
               </>
