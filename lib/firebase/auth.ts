@@ -5,45 +5,58 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-export const registerUser = async (userEmail: string, userPassword: string) => {
-  let appUser: { uid: string } = { uid: "" };
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      userEmail,
-      userPassword
-    );
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        appUser.uid = user.uid;
-      } else {
-      }
-    });
-
-    return appUser;
-  } catch (error) {
-    console.log(error);
-  }
+export let currentUser: {
+  uid: string;
+  email: string | null;
+} = {
+  uid: "",
+  email: "",
 };
 
-export const loginUser = async (userEmail: string, userPassword: string) => {
-  let appUser: { uid: string } = { uid: "" };
+const getCurrentUser = async () => {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      currentUser.uid = user.uid;
+      currentUser.email = user.email;
+
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+      return currentUser;
+    } else {
+    }
+  });
+};
+
+export const authenticateUser = async (
+  authType: string,
+  userEmail: string,
+  userPassword: string
+) => {
+  // let appUser: { uid: string } = { uid: "" };
   try {
+    if (authType === "Create account") {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        userEmail,
+        userPassword
+      );
+
+      await getCurrentUser();
+      console.log(currentUser);
+
+      return userCredential;
+    }
+
     const userCredential = await signInWithEmailAndPassword(
       auth,
       userEmail,
       userPassword
     );
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        appUser.uid = user.uid;
-      } else {
-      }
-    });
+    getCurrentUser();
+    console.log(currentUser);
 
-    return appUser;
+    return userCredential;
   } catch (error) {
     console.log(error);
   }

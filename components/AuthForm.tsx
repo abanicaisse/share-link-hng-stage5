@@ -5,7 +5,8 @@ import { Button } from "./ui/button";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginUser, registerUser } from "@lib/firebase/auth";
+import { authenticateUser } from "@lib/firebase/auth";
+import { lstat } from "fs";
 
 type AuthProps = {
   authType: string;
@@ -72,33 +73,24 @@ const AuthForm = ({
         : zodResolver(loginSchema),
   });
 
-  const onRegistrationSubmit: SubmitHandler<signupInputFields> = async (
-    data
-  ) => {
+  const onFormSubmit: SubmitHandler<signupInputFields> = async (data) => {
     try {
-      const user = await registerUser(data.email, data.password);
-      registerUser(data.email, data.password);
+      if (authType === "Create account") {
+        const user = await authenticateUser(
+          "Create account",
+          data.email,
+          data.password
+        );
+
+        authenticateUser("Create account", data.email, data.password);
+      }
+
+      const user = await authenticateUser("Login", data.email, data.password);
+
+      authenticateUser("Login", data.email, data.password);
 
       if (!user) return;
       router.push("/home");
-
-      throw new Error();
-    } catch (error) {
-      console.log(error);
-      setError("root", { message: "This email is already taken" });
-    }
-  };
-
-  const onLoginSubmit: SubmitHandler<signupInputFields> = async (data) => {
-    try {
-      const user = await loginUser(data.email, data.password);
-      loginUser(data.email, data.password);
-
-      if (!user) return;
-      router.push("/home");
-
-      console.log(user);
-      throw new Error();
     } catch (error) {
       console.log(error);
       setError("root", { message: "This email is already taken" });
@@ -125,11 +117,7 @@ const AuthForm = ({
             <form
               action="#"
               className="flex flex-col flex-1 gap-6"
-              onSubmit={
-                authType === "Create account"
-                  ? handleSubmit(onRegistrationSubmit)
-                  : handleSubmit(onLoginSubmit)
-              }
+              onSubmit={handleSubmit(onFormSubmit)}
             >
               {inputFields.map((inputField) => (
                 <div key={inputField.inputId}>

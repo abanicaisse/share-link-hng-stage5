@@ -17,7 +17,7 @@ const formSchema = z.object({
 
 const UserLink = () => {
   return (
-    <div className="flex flex-col gap-[1.25rem] p-[1.25rem]">
+    <div className="flex flex-col gap-[.25rem] p-[1.25rem] bg-gray-lightest mb-6 rounded-[.75rem]">
       <div className="flex justify-between gap-12">
         <div className="flex gap-2">
           <GripHorizontal className="text-gray w-[.75rem]" />

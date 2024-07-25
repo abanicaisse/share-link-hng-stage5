@@ -1,9 +1,12 @@
+"use client";
 import { Button } from "@components/ui/button";
 import UserLink from "@components/UserLink";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  const userLinks: string[] = [];
+  const [addedLinksTracker, setAddedLinksTracker] = useState<number[]>([]);
+
   return (
     <section className="w-full max-w-[90rem] m-auto flex lg:flex-row p-4 gap-6 bg-gray-lightest md:justify-center">
       <div className="desktop-preview bg-white hidden lg:flex justify-center align-center flex-[0.4] rounded-[.75rem]">
@@ -26,12 +29,15 @@ export default function Home() {
                 with the world!
               </p>
             </div>
-            <Button className="px-[0.69rem] py-[1.69rem] bg-gray-lightest text-purple font-bold text-md rounded-[.5rem] border-[1px] border-purple hover:bg-purple-lightest focus:bg-purple-lightest disabled:border-gray disabled:text-gray">
+            <Button
+              className="px-[0.69rem] py-[1.69rem] bg-gray-lightest text-purple font-bold text-md rounded-[.5rem] border-[1px] border-purple hover:bg-purple-lightest focus:bg-purple-lightest disabled:border-gray disabled:text-gray"
+              onClick={() => setAddedLinksTracker((prev) => [...prev, 1])}
+            >
               + Add new link
             </Button>
           </div>
-          <div className=" bg-gray-lightest rounded-[.75rem]">
-            {userLinks.length === 0 ? (
+          <div className="rounded-[.75rem]">
+            {!addedLinksTracker || addedLinksTracker?.length === 0 ? (
               <>
                 <div className="w-full bg-gray-lightest rounded-[.75rem] text-center py-[2.91rem] md:py-[5.16rem] px-[1.25rem] flex flex-col gap-6 justify-center align-center">
                   <Image
@@ -54,7 +60,9 @@ export default function Home() {
               </>
             ) : (
               <>
-                <UserLink />
+                {addedLinksTracker.map((tracker, i) => (
+                  <UserLink key={i} />
+                ))}
               </>
             )}
           </div>
