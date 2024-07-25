@@ -2,20 +2,27 @@
 import { Button } from "@components/ui/button";
 import UserLink from "@components/UserLink";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function Home() {
   const [addedLinksTracker, setAddedLinksTracker] = useState<number[]>([]);
 
-  const addedLinksJSON = localStorage.getItem("addedLinks");
+  const addedLinksJSON =
+    typeof window !== "undefined"
+      ? window.localStorage.getItem("addedLinks")
+      : "";
 
   const addedLinks: number[] =
     addedLinksJSON !== null ? JSON.parse(addedLinksJSON) : [];
 
-  const addLinkToUi = () => {
+  const addLinkToUi = useCallback(() => {
     setAddedLinksTracker((prev) => [...prev, 1]);
     localStorage.setItem("addedLinks", JSON.stringify(addedLinksTracker));
-  };
+  }, [addedLinks]);
+
+  useEffect(() => {
+    addLinkToUi();
+  }, []);
 
   return (
     <section className="w-full max-w-[90rem] m-auto flex lg:flex-row p-4 gap-6 bg-gray-lightest md:justify-center">
