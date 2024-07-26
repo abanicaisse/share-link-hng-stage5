@@ -32,7 +32,6 @@ export const authenticateUser = async (
   userEmail: string,
   userPassword: string
 ) => {
-  // let appUser: { uid: string } = { uid: "" };
   try {
     if (authType === "Create account") {
       const userCredential = await createUserWithEmailAndPassword(
@@ -42,8 +41,6 @@ export const authenticateUser = async (
       );
 
       await getCurrentUser();
-      console.log(currentUser);
-
       return userCredential;
     }
 
@@ -54,8 +51,6 @@ export const authenticateUser = async (
     );
 
     getCurrentUser();
-    console.log(currentUser);
-
     return userCredential;
   } catch (error) {
     console.log(error);

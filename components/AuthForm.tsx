@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authenticateUser } from "@lib/firebase/auth";
+import { writeUserToDb } from "@lib/firebase/database";
 import { lstat } from "fs";
 
 type AuthProps = {
@@ -82,7 +83,12 @@ const AuthForm = ({
           data.password
         );
 
-        authenticateUser("Create account", data.email, data.password);
+        const userId = user?.user.uid !== undefined ? user?.user.uid : "";
+        const userEmail =
+          user?.user.email !== undefined && user?.user.email !== null
+            ? user?.user.email
+            : "";
+        writeUserToDb(userId, "", "", userEmail, "", {});
       }
 
       const user = await authenticateUser("Login", data.email, data.password);

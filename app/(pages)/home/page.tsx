@@ -7,23 +7,6 @@ import { useCallback, useEffect, useState } from "react";
 export default function Home() {
   const [addedLinksTracker, setAddedLinksTracker] = useState<number[]>([]);
 
-  const addedLinksJSON =
-    typeof window !== "undefined"
-      ? window.localStorage.getItem("addedLinks")
-      : "";
-
-  const addedLinks: number[] =
-    addedLinksJSON !== null ? JSON.parse(addedLinksJSON) : [];
-
-  const addLinkToUi = useCallback(() => {
-    setAddedLinksTracker((prev) => [...prev, 1]);
-    localStorage.setItem("addedLinks", JSON.stringify(addedLinksTracker));
-  }, [addedLinks]);
-
-  useEffect(() => {
-    addLinkToUi();
-  }, []);
-
   return (
     <section className="w-full max-w-[90rem] m-auto flex lg:flex-row p-4 gap-6 bg-gray-lightest md:justify-center">
       <div className="desktop-preview bg-white hidden lg:flex justify-center align-center flex-[0.4] rounded-[.75rem]">
@@ -48,13 +31,13 @@ export default function Home() {
             </div>
             <Button
               className="px-[0.69rem] py-[1.69rem] bg-gray-lightest text-purple font-bold text-md rounded-[.5rem] border-[1px] border-purple hover:bg-purple-lightest focus:bg-purple-lightest disabled:border-gray disabled:text-gray"
-              onClick={() => addLinkToUi()}
+              onClick={() => setAddedLinksTracker((prev) => [...prev, 1])}
             >
               + Add new link
             </Button>
           </div>
           <div className="rounded-[.75rem]">
-            {!addedLinks || addedLinks?.length === 0 ? (
+            {!addedLinksTracker || addedLinksTracker?.length === 0 ? (
               <>
                 <div className="w-full bg-gray-lightest rounded-[.75rem] text-center py-[2.91rem] md:py-[5.16rem] px-[1.25rem] flex flex-col gap-6 justify-center align-center">
                   <Image
@@ -77,7 +60,7 @@ export default function Home() {
               </>
             ) : (
               <>
-                {addedLinks?.map((tracker, i) => (
+                {addedLinksTracker?.map((tracker, i) => (
                   <UserLink key={i} />
                 ))}
               </>
